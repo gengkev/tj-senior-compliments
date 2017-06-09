@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block title %}{{ user.full_name }}{% endblock %}
+{% block body %}
+
+<h1>{{ user.full_name }} <small>{{ user.tj_username }}</small></h1>
+
+<h2>Comments you've written</h2>
+<ul>
+{% for comment in comments_authored %}
+    <li>
+        <b>To:</b> {{ comment.recipient.full_name }}<br>
+        <b>Title:</b> {{ comment.title }}<br>
+        <p>{{ comment.content }}</p>
+    </li>
+{% endfor %}
+</ul>
+
+<h2>Comments you've received</h2>
+<ul>
+{% for comment in comments_received %}
+    <li>
+        <b>From:</b> {{ comment.author.full_name }}<br>
+        <b>Title:</b> {{ comment.title }}<br>
+        <p>{{ comment.content }}</p>
+    </li>
+{% endfor %}
+</ul>
+
+{% endblock %}
+

@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+
+<h1>Hello world</h1>
+
+<h2>Create a new comment</h2>
+
+<form class="pure-form pure-form-aligned" method="POST" action="comment">
+    <fieldset>
+        <div class="pure-control-group">
+            <label for="author-input">From</label>
+            <input type="text" id="author-input" name="author" placeholder="2017kgeng">
+        </div>
+        <div class="pure-control-group">
+            <label for="recipient-input">To</label>
+            <input type="text" id="recipient-input" name="recipient" placeholder="2017kgeng">
+        </div>
+        <div class="pure-control-group">
+            <label for="title-input">Title</label>
+            <input type="text" id="title-input" name="title" placeholder="Ur cool">
+        </div>
+        <div class="pure-control-group">
+            <label for="content-input">Content</label>
+            <textarea id="content-input" name="content"></textarea>
+        </div>
+        <div class="pure-controls">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
+</form>
+
+<h2>List of all comments</h2>
+<ul>
+{% for comment in comments %}
+    <li>
+        <b>From:</b> {{ comment.author.full_name }}<br>
+        <b>To:</b> {{ comment.recipient.full_name }}<br>
+        <b>Title:</b> {{comment.title}}<br>
+        <p>{{ comment.content }}</p>
+    </li>
+{% endfor %}
+</ul>
+
+
+<h2>List of all seniors:</h2>
+<ul>
+{% for user in users %}
+<li><a href="user/{{ user.tj_username }}">{{ user.ion_id }}: {{ user.full_name }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}
+
