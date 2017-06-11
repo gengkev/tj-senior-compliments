@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+
+<div class="splash-container">
+    <div class="splash">
+        <h1 class="splash-head">TJ Senior Compliments</h1>
+        <p class="splash-subhead">
+            Write compliments to members of the graduating class of 2017.<br>
+            You need to log in with Ion to authenticate your comments.
+        </p>
+        <form method="POST">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="pure-button pure-button-primary">Sign in with Ion</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import datetime
 import os
 
 from peewee import *
@@ -13,29 +14,58 @@ class BaseModel(Model):
     class Meta:
         database = db
 
-class Person(BaseModel):
+
+class Senior(BaseModel):
     ion_id = PrimaryKeyField()
     tj_username = CharField(unique=True)
 
-    # name
-    full_name = CharField()
+    # Name fields from Ion
     first_name = CharField()
-    middle_name = CharField()
     last_name = CharField()
-    nickname = CharField(default='')
+    full_name = CharField()
 
-    # facebook
-    facebook_link = CharField(default='')
+    # Nickname is manually curated
+    nickname = CharField(null=True)
 
+    # Prefers nickname over first_name
+    display_name = CharField()
+
+    # Pulled from script / manually curated
+    facebook_id = CharField(null=True)
+    facebook_name = CharField(null=True)
+    facebook_picture = TextField(null=True)
+
+
+class User(BaseModel):
+    ion_id = PrimaryKeyField()
+    tj_username = CharField(unique=True)
+
+    # info pulled from ion
+    full_name = CharField()
+    user_type = CharField()
+    graduation_year = IntegerField(null=True)
+
+    # ugh
+    senior = ForeignKeyField(Senior, null=True)
+
+    # for record keeping
+    created = DateTimeField(default=datetime.datetime.now)
+    last_login = DateTimeField(default=datetime.datetime.now)
+
+    def get_display_name(self):
+        if self.senior is not None:
+            return self.senior.display_name
+        else:
+            return self.full_name
 
 class Staffer(BaseModel):
     username = CharField(unique=True)
-    person = ForeignKeyField(Person)
+    person = ForeignKeyField(Senior)
 
 
 class Known(BaseModel):
     staffer = ForeignKeyField(Staffer)
-    person = ForeignKeyField(Person, related_name='known_by')
+    person = ForeignKeyField(Senior, related_name='known_by')
     status = IntegerField(default=0)
 
     class Meta:
@@ -45,14 +75,16 @@ class Known(BaseModel):
 
 
 class Comment(BaseModel):
-    author = ForeignKeyField(Person, related_name='comments_authored')
-    recipient = ForeignKeyField(Person, related_name='comments_received')
+    author = ForeignKeyField(User, related_name='comments_authored')
+    recipient = ForeignKeyField(Senior, related_name='comments_received')
     title = CharField()
     content = TextField()
+    created = DateTimeField(default=datetime.datetime.now)
+    last_modified = DateTimeField(default=datetime.datetime.now)
 
 
 def clear_tables():
-    table_list = [Person, Staffer, Known, Comment]
+    table_list = [Senior, User, Staffer, Known, Comment]
     db.connect()
     db.drop_tables(table_list, safe=True)
     db.create_tables(table_list)

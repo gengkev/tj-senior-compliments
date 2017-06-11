@@ -1,12 +1,38 @@
 {% extends "layout.html" %}
-{% block title %}{{ user.full_name }}{% endblock %}
+{% block title %}{{ display_name }}{% endblock %}
 {% block body %}
 
-<h1>{{ user.full_name }} <small>{{ user.tj_username }}</small></h1>
+<main class="main-content">
 
-<h2>Comments you've written</h2>
+<h1>{{ display_name }} <small>{{ tj_username }}</small></h1>
+
+{% if user %}
+<p>
+This user created their account at {{ user.created }}.
+</p>
+{% else %}
+This user has never logged into Senior Compliments.
+{% endif %}
+
+{% if senior %}
+<p>This user is a senior.</p>
+<p>
+<img src="{{ senior.facebook_picture }}">
+</p>
+<a href="https://ion.tjhsst.edu/profile/{{ senior.ion_id }}" class="pure-button">
+    <img src="https://ion.tjhsst.edu/favicon.ico" width="16" height="16">
+    {{ senior.full_name }}
+</a>
+<a href="https://www.facebook.com/{{ senior.facebook_id }}" class="pure-button pure-button-primary">
+    <i class="fa fa-facebook" aria-hidden="true"></i>&nbsp;
+    {{ senior.facebook_name }}
+</a>
+{% endif %}
+
+{% if user %}
+<h2>Comments written</h2>
 <ul>
-{% for comment in comments_authored %}
+{% for comment in user.comments_authored %}
     <li>
         <b>To:</b> {{ comment.recipient.full_name }}<br>
         <b>Title:</b> {{ comment.title }}<br>
@@ -14,10 +40,12 @@
     </li>
 {% endfor %}
 </ul>
+{% endif %}
 
-<h2>Comments you've received</h2>
+{% if senior %}
+<h2>Comments received</h2>
 <ul>
-{% for comment in comments_received %}
+{% for comment in senior.comments_received %}
     <li>
         <b>From:</b> {{ comment.author.full_name }}<br>
         <b>Title:</b> {{ comment.title }}<br>
@@ -25,6 +53,25 @@
     </li>
 {% endfor %}
 </ul>
+
+<h2>Write a compliment!</h2>
+<form class="pure-form" method="POST" action="/comment">
+    <fieldset class="pure-group">
+        <input class="pure-input-1-2" type="text" id="title-input" name="title" placeholder="Title">
+        <textarea class="pure-input-1-2" id="content-input" name="content" placeholder="Compliment"></textarea>
+    </fieldset>
+
+    <div class="pure-controls">
+        <input type="hidden" name="recipient" value="{{ senior.ion_id }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    </div>
+</form>
+
+
+{% endif %}
+
+</main>
 
 {% endblock %}
 

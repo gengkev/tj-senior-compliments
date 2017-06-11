@@ -2,41 +2,27 @@
 {% block title %}Home{% endblock %}
 {% block body %}
 
+<main class="main-content">
 <h1>Hello world</h1>
 
-<h2>Create a new comment</h2>
-
-<form class="pure-form pure-form-aligned" method="POST" action="comment">
-    <fieldset>
-        <div class="pure-control-group">
-            <label for="author-input">From</label>
-            <input type="text" id="author-input" name="author" placeholder="2017kgeng">
-        </div>
-        <div class="pure-control-group">
-            <label for="recipient-input">To</label>
-            <input type="text" id="recipient-input" name="recipient" placeholder="2017kgeng">
-        </div>
-        <div class="pure-control-group">
-            <label for="title-input">Title</label>
-            <input type="text" id="title-input" name="title" placeholder="Ur cool">
-        </div>
-        <div class="pure-control-group">
-            <label for="content-input">Content</label>
-            <textarea id="content-input" name="content"></textarea>
-        </div>
-        <div class="pure-controls">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
-            <button type="submit" class="pure-button pure-button-primary">Submit</button>
-        </div>
-</form>
+<p>
+Hello, {{ user.get_display_name() }}!
+Your username is <a href="/user/{{ user.tj_username }}">{{ user.tj_username }}</a>.
+</p>
 
 <h2>List of all comments</h2>
 <ul>
 {% for comment in comments %}
     <li>
-        <b>From:</b> {{ comment.author.full_name }}<br>
-        <b>To:</b> {{ comment.recipient.full_name }}<br>
-        <b>Title:</b> {{comment.title}}<br>
+        <b>From:</b>
+        <a href="/user/{{ comment.author.tj_username }}">{{ comment.author.get_display_name() }}</a>
+        <br>
+        <b>To:</b>
+        <a href="/user/{{ comment.recipient.tj_username }}">{{ comment.recipient.display_name }}</a>
+        <br>
+        <b>Title:</b>
+        {{comment.title}}
+        <br>
         <p>{{ comment.content }}</p>
     </li>
 {% endfor %}
@@ -44,11 +30,19 @@
 
 
 <h2>List of all seniors:</h2>
-<ul>
-{% for user in users %}
-<li><a href="user/{{ user.tj_username }}">{{ user.ion_id }}: {{ user.full_name }}</a></li>
+<div class="pure-menu pure-menu-scrollable senior-list">
+<ul class="pure-menu-list">
+{% for senior in seniors %}
+<li class="pure-menu-item senior-list-item">
+    <a href="user/{{ senior.tj_username }}" class="pure-menu-link">
+        <img src="{{ senior.facebook_picture }}">
+        {{ senior.display_name }}
+    </a>
+</li>
 {% endfor %}
 </ul>
+</div>
 
+</main>
 {% endblock %}
 
