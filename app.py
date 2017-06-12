@@ -41,20 +41,32 @@ def login_required(f):
 @app.route('/')
 @login_required
 def home():
-    seniors = Senior.select().order_by(Senior.last_name)
-    comments = Comment.select(Comment, Senior).join(Senior)
-    return render_template('index.html',
+    return render_template('index.html', user=g.user)
+
+
+@app.route('/seniors')
+@login_required
+def all_seniors():
+    seniors = (Senior.select()
+        .order_by(Senior.last_name, Senior.tj_username))
+    return render_template('all_seniors.html',
             user=g.user,
-            seniors=seniors,
+            seniors=seniors)
+
+
+@app.route('/all_comments')
+@login_required
+def all_comments():
+    comments = Comment.select(Comment, Senior).join(Senior)
+    return render_template('all_comments.html',
+            user=g.user,
             comments=comments)
 
 
 @app.route('/profile')
 @login_required
 def profile():
-    r = g.ion.get('https://ion.tjhsst.edu/api/profile')
-    print(r.json())
-    return jsonify(r.json())
+    return render_template('profile.html', user=g.user)
 
 
 @app.route('/login', methods=['GET', 'POST'])

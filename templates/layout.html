@@ -7,11 +7,38 @@
     <title>Test page &mdash; {% block title %}{% endblock %}</title>
 
     <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
-    <link rel="stylesheet" href="/static/main.css">
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="/static/main.css">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 </head>
 
 <body>
+
+<div class="header">
+    <div class="home-menu pure-menu pure-menu-horizontal">
+        <a class="pure-menu-heading" href="">Senior Compliments</a>
+
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item">
+                <a href="/" class="pure-menu-link">Home</a>
+            </li>
+            <li class="pure-menu-item">
+                <a href="/seniors" class="pure-menu-link">Seniors</a>
+            </li>
+            <li class="pure-menu-item">
+                <a href="/scoreboard" class="pure-menu-link">Scoreboard</a>
+            </li>
+            <li class="pure-menu-item">
+                <a href="/profile" class="pure-menu-link">
+                    <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
+                    {{ user and user.get_display_name() or 'Not signed in' }}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 {% block body %}{% endblock %}
 </body>
 

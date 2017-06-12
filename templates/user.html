@@ -23,32 +23,24 @@ This user has never logged into Senior Compliments.
     <img src="https://ion.tjhsst.edu/favicon.ico" width="16" height="16">
     {{ senior.full_name }}
 </a>
+
+{% if senior.facebook_id %}
 <a href="https://www.facebook.com/{{ senior.facebook_id }}" class="pure-button pure-button-primary">
     <i class="fa fa-facebook" aria-hidden="true"></i>&nbsp;
     {{ senior.facebook_name }}
 </a>
 {% endif %}
 
-{% if user %}
-<h2>Comments written</h2>
-<ul>
-{% for comment in user.comments_authored %}
-    <li>
-        <b>To:</b> {{ comment.recipient.full_name }}<br>
-        <b>Title:</b> {{ comment.title }}<br>
-        <p>{{ comment.content }}</p>
-    </li>
-{% endfor %}
-</ul>
+<h2>Comments received</h2>
+{% if not senior.comments_received %}
+<p>None received so far!</p>
 {% endif %}
 
-{% if senior %}
-<h2>Comments received</h2>
-<ul>
+<ul class="comment-list">
 {% for comment in senior.comments_received %}
-    <li>
-        <b>From:</b> {{ comment.author.full_name }}<br>
-        <b>Title:</b> {{ comment.title }}<br>
+    <li class="comment-list-item">
+        <em>{{ comment.author.get_display_name() }}</em><br>
+        <strong>{{ comment.title }}</strong><br>
         <p>{{ comment.content }}</p>
     </li>
 {% endfor %}

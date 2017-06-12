@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}All seniors{% endblock %}
+{% block body %}
+
+<main class="main-content">
+
+<h1>All seniors</h1>
+<div id="slist-container">
+    <form class="pure-form">
+        <input type="search" class="search pure-input-1" placeholder="Search">
+    </form>
+    <div class="pure-menu pure-menu-scrollable senior-list">
+        <ul class="list pure-menu-list">
+            {% for senior in seniors %}
+            <li class="pure-menu-item senior-list-item">
+                <a href="user/{{ senior.tj_username }}" class="pure-menu-link">
+                    <img src="{{ senior.facebook_picture }}">
+                    <span class="slist-display-name">{{ senior.display_name }}</span>
+                    <span class="slist-full-name hidden" aria-hidden="true">{{ senior.full_name }}</span>
+                    <span class="slist-facebook-name hidden" aria-hidden="true">{{ senior.facebook_name }}</span>
+                    <span class="slist-tj-username hidden" aria-hidden="true">{{ senior.tj_username }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+</main>
+
+<script>
+var userList = new List('slist-container', {
+    valueNames: [
+        'slist-display-name',
+        'slist-full-name',
+        'slist-facebook-name',
+        'slist-tj-username'
+    ]
+});
+</script>
+
+{% endblock %}
+

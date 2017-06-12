@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Profile{% endblock %}
+{% block body %}
+
+<main class="main-content">
+Hello {{ user.get_display_name() }}! You are {{ user.tj_username }}.
+
+<h2>Your compliments</h2>
+<ul>
+{% for comment in user.comments_authored %}
+    <li>
+        <b>To:</b> {{ comment.recipient.full_name }}<br>
+        <b>Title:</b> {{ comment.title }}<br>
+        <p>{{ comment.content }}</p>
+    </li>
+{% endfor %}
+</ul>
+
+
+</main>
+
+{% endblock %}
+

@@ -21,7 +21,7 @@ class Senior(BaseModel):
 
     # Name fields from Ion
     first_name = CharField()
-    last_name = CharField()
+    last_name = CharField(index=True)
     full_name = CharField()
 
     # Nickname is manually curated
