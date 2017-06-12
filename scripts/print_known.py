@@ -3,9 +3,9 @@
 from models import *
 from collections import OrderedDict
 
-query = (Known.select(Known, Person, Staffer)
+query = (Known.select(Known, Senior, Staffer)
         .join(Staffer).switch(Known)
-        .join(Person).order_by(Person.last_name))
+        .join(Senior).order_by(Senior.last_name, Senior.tj_username))
 
 people = OrderedDict()
 for known in query:
