@@ -30,6 +30,7 @@ def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'login_id' in session:
+            flash('Warning: this is under construction, and things will break. :(')
             ion_id = session['login_id']
             g.login_user = User.get(ion_id=ion_id)
             return f(*args, **kwargs)
@@ -152,6 +153,9 @@ def authorized():
     if not next_url or next_url_parsed.scheme or next_url_parsed.netloc:
         print('invalid next_url:', next_url)
         next_url = url_for('home')
+    else:
+        # TODO: bad
+        next_url = url_for('home') + next_url
     return redirect(next_url)
 
 
@@ -204,7 +208,9 @@ def create_comment():
 
 @app.route('/debug')
 def debug():
-    return jsonify(session=repr(session))
+    return jsonify(session=repr(session), blah=repr(app.config),
+            test1=url_for('authorized', _external=True),
+            test2=url_for('home'))
 
 
 # Database lifecycle

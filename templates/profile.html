@@ -7,7 +7,7 @@
 
 <p>
     Hello {{ login_user.get_display_name() }}!
-    View your <a href="/user/{{ login_user.tj_username }}">profile page</a>.
+    View your <a href="{{ url_for('get_user', username=login_user.tj_username) }}">profile page</a>.
 </p>
 
 <h2>Your compliments</h2>
