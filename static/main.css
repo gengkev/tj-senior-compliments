@@ -1,23 +1,130 @@
-.main-content {
-    max-width: 800px;
-    margin: auto;
-    padding: 2em;
+body {
+    font-size: 14px;
+    background-color: #fafafa;
 }
 
+.main-content {
+    max-width: 768px;
+    margin: auto;
+    padding: 2em;
+    padding-top: 1em;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgb(0, 0, 0, 0.1);
+}
+
+.header {
+    background-color: #aaa;
+}
+
+.wider-content {
+    max-width: 1280px;
+}
+
+
+/* navigation bar */
 .home-menu {
     padding: 0.5em;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.10);
+    background: #2d3e50;
+    font-size: 16px;
 }
 
+.home-menu .pure-menu-heading {
+    color: white;
+    font-weight: 400;
+}
+
+.home-menu .pure-menu-selected a {
+    color: white !important;
+}
+
+.home-menu a {
+    color: #6FBEF3;
+}
+.home-menu li a:hover,
+.home-menu li a:focus {
+    background: none;
+    border: none;
+    color: #AECFE5;
+}
+
+
+/* miscellaneous stuff */
+.alert {
+    max-width: 768px;
+    padding: 1em;
+    margin: 1em auto;
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border: 1px solid #faebcc;
+    border-radius: 4px;
+}
+
+.l-box {
+    padding: 1em;
+}
+
+.ion-icon:before {
+    content: "";
+    background-image: url(https://ion.tjhsst.edu/favicon.ico);
+    background-size: 16px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* user page */
+.user-header small {
+    color: #888;
+}
+
+.user-header .profile-picture {
+    vertical-align: middle;
+    margin-right: 0.2em;
+    width: 2rem;
+    height: 2rem;
+    background-color: #ccc;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgb(0, 0, 0, 0.10);
+}
+
+/* list of comments */
 .comment-list {
     padding: 0;
 }
 
 .comment-list-item {
     list-style-type: none;
-    padding: 1em;
     border-radius: 4px;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.40);
+    border: 1px solid #bce8f1;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1em;
+}
+
+.comment-list-item .comment-heading {
+    padding: 0.5em 1em;
+    color: #31708f;
+    background-color: #d9edf7;
+    border-bottom: 1px solid #bce8f1;
+    font-size: 16px;
+}
+
+.comment-list-item .comment-author {
+    float: right;
+}
+
+.comment-list-item .comment-author a {
+    color: #31708f;
+}
+
+.comment-list-item .comment-body {
+    padding: 1em 1em;
+    white-space: pre-wrap;
 }
 
 /* list of all seniors */
@@ -33,10 +140,10 @@
     font-size: 16pt;
 }
 
-.senior-list-item img {
+.senior-list-item .profile-picture {
+    vertical-align: middle;
     width: 32px;
     height: 32px;
-    vertical-align: middle;
     margin-right: 1em;
     border: 0;
     background-color: #ccc;
@@ -44,20 +151,17 @@
 
 /* splash page */
 .splash-container {
-    background: #1f8dd6;
-    width: 100%;
-    height: 100%;
     padding: 6em 2em;
 }
 
-
 .splash {
+    background: #1f8dd6;
     width: 50em;
     margin: auto;
     padding: 4em 4em;
     text-align: center;
-    border: 3px solid white;
-    border-radius: 5px;
+    border-radius: 8px;
+    box-shadow: 0 1px 1px rgb(0, 0, 0, 0.05);
 }
 
 /* This is the main heading that appears on the blue section */

@@ -5,20 +5,10 @@
 <main class="main-content">
 
 <h2>All compliments</h2>
-<ul>
+
+<ul class="comment-list">
 {% for comment in comments %}
-    <li>
-        <b>From:</b>
-        <a href="/user/{{ comment.author.tj_username }}">{{ comment.author.get_display_name() }}</a>
-        <br>
-        <b>To:</b>
-        <a href="/user/{{ comment.recipient.tj_username }}">{{ comment.recipient.display_name }}</a>
-        <br>
-        <b>Title:</b>
-        {{comment.title}}
-        <br>
-        <p>{{ comment.content }}</p>
-    </li>
+{% include "comment.html" %}
 {% endfor %}
 </ul>
 

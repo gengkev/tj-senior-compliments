@@ -1,0 +1,12 @@
+<li class="comment-list-item">
+    <div class="comment-heading">
+        <strong>{{ comment.title }}&nbsp;</strong>
+        <span class="comment-author">
+            <a href="/user/{{ comment.author.tj_username }}">{{ comment.author.get_display_name() }}</a>
+            &rarr;
+            <a href="/user/{{ comment.recipient.tj_username }}">{{ comment.recipient.display_name }}</a>
+        </span>
+    </div>
+    <div class="comment-body">{{ comment.content }}</div>
+</li>
+ 

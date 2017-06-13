@@ -4,10 +4,17 @@ import datetime
 import os
 
 from peewee import *
-from config import DATABASE_FILENAME
+from config import DATABASE_PRODUCTION, BLANK_PROFILE
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-db = SqliteDatabase(os.path.join(dir_path, DATABASE_FILENAME))
+
+# determine which database to use
+if DATABASE_PRODUCTION:
+    from config import POSTGRES_CONFIG
+    db = PostgresqlDatabase(**POSTGRES_CONFIG)
+else:
+    from config import SQLITE_FILENAME
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    db = SqliteDatabase(os.path.join(dir_path, SQLITE_FILENAME))
 
 
 class BaseModel(Model):
@@ -35,6 +42,11 @@ class Senior(BaseModel):
     facebook_name = CharField(null=True)
     facebook_picture = TextField(null=True)
 
+    def get_profile_picture(self):
+        if self.facebook_picture:
+            return self.facebook_picture
+        return BLANK_PROFILE
+
 
 class User(BaseModel):
     ion_id = PrimaryKeyField()
@@ -57,6 +69,11 @@ class User(BaseModel):
             return self.senior.display_name
         else:
             return self.full_name
+
+    def get_profile_picture(self):
+        if self.senior is not None:
+            return self.senior.get_profile_picture()
+        return BLANK_PROFILE
 
 class Staffer(BaseModel):
     username = CharField(unique=True)

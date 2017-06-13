@@ -14,7 +14,7 @@
             {% for senior in seniors %}
             <li class="pure-menu-item senior-list-item">
                 <a href="user/{{ senior.tj_username }}" class="pure-menu-link">
-                    <img src="{{ senior.facebook_picture }}">
+                    <img class="profile-picture" src="{{ senior.get_profile_picture() }}">
                     <span class="slist-display-name">{{ senior.display_name }}</span>
                     <span class="slist-full-name hidden" aria-hidden="true">{{ senior.full_name }}</span>
                     <span class="slist-facebook-name hidden" aria-hidden="true">{{ senior.facebook_name }}</span>

@@ -5,7 +5,7 @@ import os
 
 from functools import wraps
 
-from flask import Flask, render_template, request, redirect, url_for, abort, session, jsonify, g
+from flask import Flask, render_template, request, redirect, url_for, abort, session, jsonify, g, flash
 from requests_oauthlib import OAuth2Session
 
 from models import *
@@ -31,9 +31,10 @@ def login_required(f):
     def decorated(*args, **kwargs):
         if 'login_id' in session:
             ion_id = session['login_id']
-            g.user = User.get(ion_id=ion_id)
+            g.login_user = User.get(ion_id=ion_id)
             return f(*args, **kwargs)
         else:
+            flash('You need to be logged in to access that page.')
             return redirect(url_for('login', next=request.path))
     return decorated
 
@@ -41,7 +42,7 @@ def login_required(f):
 @app.route('/')
 @login_required
 def home():
-    return render_template('index.html', user=g.user)
+    return render_template('index.html', login_user=g.login_user)
 
 
 @app.route('/seniors')
@@ -50,7 +51,7 @@ def all_seniors():
     seniors = (Senior.select()
         .order_by(Senior.last_name, Senior.tj_username))
     return render_template('all_seniors.html',
-            user=g.user,
+            login_user=g.login_user,
             seniors=seniors)
 
 
@@ -59,14 +60,22 @@ def all_seniors():
 def all_comments():
     comments = Comment.select(Comment, Senior).join(Senior)
     return render_template('all_comments.html',
-            user=g.user,
+            login_user=g.login_user,
             comments=comments)
 
 
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', user=g.user)
+    return render_template('profile.html',
+            login_user=g.login_user)
+
+
+@app.route('/scoreboard')
+@login_required
+def scoreboard():
+    return render_template('scoreboard.html',
+            login_user=g.login_user)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -88,7 +97,8 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('login_id', None)
-    return redirect(url_for('home'))
+    flash('You were successfully logged out.')
+    return redirect(url_for('login'))
 
 
 @app.route('/login/authorized')
@@ -101,7 +111,6 @@ def authorized():
             OAUTH_CONFIG['access_token_url'],
             client_secret=OAUTH_CONFIG['client_secret'],
             code=code)
-    print('oauth token:', token)
 
     # get profile information
     ion = create_ion_session(token=token)
@@ -136,6 +145,7 @@ def authorized():
 
     # mark in session
     session['login_id'] = ion_id
+    flash('You were successfully logged in.')
 
     # enforce relative url for redirect
     next_url_parsed = urllib.parse.urlparse(next_url)
@@ -161,6 +171,7 @@ def get_user(username):
 
     display_name = senior.display_name if senior else user.full_name
     return render_template('user.html',
+            login_user=g.login_user,
             display_name=display_name,
             tj_username=username,
             user=user,
@@ -179,10 +190,16 @@ def create_comment():
     except Senior.DoesNotExist:
         abort(400)
 
-    ret = Comment.create(author=g.user, recipient=recipient, title=title, content=content)
-    print(ret)
+    ret = Comment.create(
+            author=g.login_user,
+            recipient=recipient,
+            title=title,
+            content=content)
 
-    return redirect(url_for('home'))
+    flash('Successfully created comment!')
+
+    # TODO: kinda bad
+    return redirect(request.referrer)
 
 
 @app.route('/debug')

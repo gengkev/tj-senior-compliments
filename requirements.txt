@@ -3,3 +3,4 @@ gunicorn~=19.7.1
 peewee~=2.9.2
 requests~=2.13.0
 requests-oauthlib~=0.8.0
+psycopg2~=2.7.1

@@ -3,18 +3,20 @@
 {% block body %}
 
 <main class="main-content">
-Hello {{ user.get_display_name() }}! You are {{ user.tj_username }}.
+<h1>Profile</h1>
+
+<p>
+    Hello {{ login_user.get_display_name() }}!
+    View your <a href="/user/{{ login_user.tj_username }}">profile page</a>.
+</p>
 
 <h2>Your compliments</h2>
-<ul>
-{% for comment in user.comments_authored %}
-    <li>
-        <b>To:</b> {{ comment.recipient.full_name }}<br>
-        <b>Title:</b> {{ comment.title }}<br>
-        <p>{{ comment.content }}</p>
-    </li>
+<ul class="comment-list">
+{% for comment in login_user.comments_authored %}
+{% include "comment.html" %}
 {% endfor %}
 </ul>
+
 
 
 </main>

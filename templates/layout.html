@@ -7,6 +7,8 @@
     <title>Test page &mdash; {% block title %}{% endblock %}</title>
 
     <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <link rel="stylesheet" href="/static/main.css">
 
@@ -17,10 +19,10 @@
 
 <div class="header">
     <div class="home-menu pure-menu pure-menu-horizontal">
-        <a class="pure-menu-heading" href="">Senior Compliments</a>
+        <a class="pure-menu-heading" href="/">TJ Senior Compliments</a>
 
         <ul class="pure-menu-list">
-            <li class="pure-menu-item">
+            <li class="pure-menu-item pure-menu-selected">
                 <a href="/" class="pure-menu-link">Home</a>
             </li>
             <li class="pure-menu-item">
@@ -32,12 +34,23 @@
             <li class="pure-menu-item">
                 <a href="/profile" class="pure-menu-link">
                     <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
-                    {{ user and user.get_display_name() or 'Not signed in' }}
+                    {{ login_user and login_user.get_display_name() or 'Not signed in' }}
                 </a>
             </li>
         </ul>
     </div>
 </div>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
 
 {% block body %}{% endblock %}
 </body>
