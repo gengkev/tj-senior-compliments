@@ -4,6 +4,7 @@ from models import *
 
 print('Seniors in database:', Senior.select().count())
 print('Seniors with Facebook urls:', Senior.select().where(Senior.facebook_id != '').count())
+print('Users in database:', User.select().count())
 print('Comments in database:', Comment.select().count())
 
 staffer_query = Staffer.select().join(Senior).order_by(Senior.tj_username.asc())

@@ -9,11 +9,34 @@ from flask import Flask, render_template, request, redirect, url_for, abort, ses
 from requests_oauthlib import OAuth2Session
 
 from models import *
-from config import SECRET_KEY, OAUTH_CONFIG, ION_PROFILE_URL, SENIOR_GRAD_YEAR
-
+from config import SECRET_KEY, OAUTH_CONFIG, ION_PROFILE_URL, \
+        SENIOR_GRAD_YEAR, URL_PRODUCTION
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+
+
+# messing with urls is bad
+
+if URL_PRODUCTION:
+    from config import PROD_SCHEME, PROD_HOST, PROD_PATH
+    class ReverseProxied(object):
+        def __init__(self, app):
+            self.app = app
+
+        def __call__(self, environ, start_response):
+            environ['wsgi.url_scheme'] = PROD_SCHEME
+            environ['HTTP_HOST'] = PROD_HOST
+            environ['SCRIPT_NAME'] = PROD_PATH
+            return self.app(environ, start_response)
+
+    app.config['PREFERRED_URL_SCHEME'] = PROD_SCHEME
+    app.config['SERVER_NAME'] = PROD_HOST
+    app.config['APPLICATION_ROOT'] = PROD_PATH
+    if PROD_SCHEME == 'https':
+        app.config['SESSION_COOKIE_SECURE'] = True
+
+    app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 
 # oauth utils
